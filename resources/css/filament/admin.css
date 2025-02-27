@@ -1,0 +1,5 @@
+/* Add a scrollbar to the toggleable column dropdown */
+.filament-tables-dropdown-list {
+    max-height: 300px; /* Adjust the height */
+    overflow-y: auto; /* Enable vertical scrolling */
+}
