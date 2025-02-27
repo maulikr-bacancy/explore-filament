@@ -13,7 +13,7 @@ class AcpPracticeModel extends Model
 
     protected static function booted()
     {
-      static::addGlobalScope('only_my_practice', function (Builder $builder) {
+      static::addGlobalScope('only_my_practice', function ($builder) {
         $practiceId = app('the-practice')->practice_id ?? null;
           if ($practiceId) {
              $builder->where((new static())->practiceKey, $practiceId);
