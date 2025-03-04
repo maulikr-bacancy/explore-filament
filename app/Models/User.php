@@ -93,6 +93,15 @@ class User extends Authenticatable
     }
 
     /**
+     * Get all the active practices assign to user in UserAuth.
+     */
+    public function activePractices()
+    {
+        return $this->hasManyThrough(Practice::class, UserAuth::class, 'user_id', 'ID', 'id', 'practice_id')
+            ->where('acp_user_auth.status', 1);
+    }
+
+    /**
      * generate the invitation token and send it when new user created
      * @param $email
      * @return false|string

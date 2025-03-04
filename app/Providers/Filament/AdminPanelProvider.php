@@ -18,6 +18,7 @@ use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 class AdminPanelProvider extends PanelProvider
@@ -26,9 +27,12 @@ class AdminPanelProvider extends PanelProvider
     {
         $practiceHandler = app()->bound('the-practice') ? app('the-practice') : null;
         $currentPractice = $practiceHandler ? $practiceHandler->model->name ?? 'None' : 'None';
+//        dd(auth('filament')->user());
+//        dd(auth()->user(),Auth::user());
 
         return $panel
             ->default()
+            ->brandName(fn() => app('the-practice')->model->Name ?? 'ACP')
             ->id('admin')
             ->path('admin')
             ->login()
@@ -60,6 +64,16 @@ class AdminPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
                 SetPracticeId::class,
+            ])->navigationItems([
+                // Super Admin User Switch
+                NavigationItem::make('Switch User')
+                    ->url('admin/impersonate/list')
+                    ->icon('heroicon-o-user-group')
+                    ->group('Admin Controls')
+                    ->visible(function (){
+                        return auth()->check() && auth()->user()->isSuperAdmin();
+                    }),
             ]);
+
     }
 }

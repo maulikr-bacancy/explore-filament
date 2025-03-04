@@ -34,7 +34,7 @@ class SwitchPractice extends Page implements HasForms
         $query = Practice::query();
 
         if (!Auth::user()->isSuperAdmin()) {
-            $query->whereIn('ID', Auth::user()->userAuths()->where('status', 1)->pluck('Name','practice_id'));
+            $query->whereIn('ID', Auth::user()->userAuths()->where('status', 1)->pluck('practice_id'));
         }
 
         if (!empty($this->search)) {
@@ -54,7 +54,7 @@ class SwitchPractice extends Page implements HasForms
             $userAuthorizedPractices = Auth::user()->userAuths()
                 ->where('role', '!=', 'none')
                 ->where('status', 1)
-                ->pluck('Name','practice_id')
+                ->pluck('practice_id')
                 ->toArray();
 
             if (!in_array($practiceId, $userAuthorizedPractices)) {

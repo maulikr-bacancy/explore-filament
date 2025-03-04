@@ -16,6 +16,7 @@ class SetPracticeId
     public function handle(Request $request, Closure $next): Response
     {
         // Allow access to switch-practice page
+
         if ($request->route()->getName() === 'filament.admin.pages.switch-practice') {
             return $next($request);
         }
@@ -30,7 +31,7 @@ class SetPracticeId
             $userAuthorizedPractices = $request->user()->userAuths()->where('role', '!=', 'none')->where('status', 1)->select('practice_id', 'role', 'status')->get();
             if (! $userAuthorizedPractices->contains('practice_id', session('practice_id'))) {
                 session()->flash('error', 'please select a practice');
-                return redirect('filament.admin.pages.switch-practice');
+                return redirect()->route('filament.admin.pages.switch-practice');
             }
         }
         return $next($request);
